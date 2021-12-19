@@ -29,15 +29,33 @@ namespace PlaywrightTests.Pages
             return this;
         }
 
+        public async Task<FundingPage> SelectDepositWindowAsync()
+        {
+            await Page.ClickAsync("#deposit");
+            return this;
+        }
+
+        public async Task<FundingPage> SelectCreditCardDepositAsync()
+        {
+            await Page.ClickAsync("//*[@id='deposit-form']/div[1]/div/table/tbody/tr/td[5]/a");
+            return this;
+        }
+
         public async Task<FundingPage> SelectCreditCardWithdrawalAsync()
         {
             await Page.ClickAsync("//*[@id='withdrawal-form']/div[1]/div/table/tbody/tr/td[5]/a");
             return this;
         }
 
-        public async Task<FundingPage> InputWithdrawalAmountAsync(double amount)
+        public async Task<FundingPage> InputAmountAsync(double amount)
         {
             await Page.FillAsync("//input[@class='adjustmentAmount']", Convert.ToString(amount));
+            return this;
+        }
+
+        public async Task<FundingPage> FinishDepositAsync()
+        {
+            await Page.ClickAsync("#deposit-proceed");
             return this;
         }
 
@@ -51,12 +69,21 @@ namespace PlaywrightTests.Pages
         {
             await SelectWithdrawWindowAsync().Result
                 .SelectCreditCardWithdrawalAsync().Result
-                .InputWithdrawalAmountAsync(amount).Result
+                .InputAmountAsync(amount).Result
                 .FinishWithdrawalAsync();
             return this;
         }
 
-        public async Task<FundingPage> InputAmountAsync(double amount)
+        public async Task<FundingPage> MakeDepositAsync(double amount)
+        {
+            await SelectDepositWindowAsync().Result
+                .SelectCreditCardDepositAsync().Result
+                .InputAmountAsync(amount).Result
+                .FinishDepositAsync();
+            return this;
+        }
+
+        public async Task<FundingPage> InputTransferAmountAsync(double amount)
         {
             await Page.FillAsync("#withdrawal-amount", Convert.ToString(amount));
             return this;
@@ -77,7 +104,7 @@ namespace PlaywrightTests.Pages
         public async Task<FundingPage> MakeTransferAsync(double amount)
         {
             await SelectTransferWindowAsync().Result
-                .InputAmountAsync(amount).Result
+                .InputTransferAmountAsync(amount).Result
                 .CheckRateAsync().Result
                 .FinishTransferAsync();
             return this;
@@ -98,7 +125,7 @@ namespace PlaywrightTests.Pages
                         .Result.Remove(0, 1)), 5);
         }
 
-        public async Task<Double> GetWithdrawalResultAsync()
+        public async Task<Double> GetResultAsync()
         {
             return Math.Round(
                 Convert.ToDouble(

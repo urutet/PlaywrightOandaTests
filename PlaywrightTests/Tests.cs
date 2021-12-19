@@ -46,9 +46,21 @@ namespace PlaywrightTests
             FundingPage fundingPage = await new MainPage(_page)
                 .GoToFundingPageAsync().Result
                 .MakeWithdrawalAsync(10);
-            Withdraw withdraw = new Withdraw(amount, await fundingPage.GetWithdrawalResultAsync());
+            Withdraw withdraw = new Withdraw(amount, await fundingPage.GetResultAsync());
 
             Assert.AreEqual(withdraw.BalanceBeforeWithdrawal, withdraw.BalanceAfterWithdrawal + withdraw.Amount);
+        }
+
+        [Test]
+        [TestCase(10)]
+        public async Task MoneyDeposit_ReturnsExpectedValue(double amount)
+        {
+            FundingPage fundingPage = await new MainPage(_page)
+                .GoToFundingPageAsync().Result
+                .MakeDepositAsync(10);
+            Deposit deposit = new Deposit(amount, await fundingPage.GetResultAsync());
+
+            Assert.AreEqual(deposit.BalanceBeforeDeposit, deposit.BalanceAfterDeposit - deposit.Amount);
         }
 
         [OneTimeTearDown]
