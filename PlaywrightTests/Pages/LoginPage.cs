@@ -7,9 +7,9 @@ using Microsoft.Playwright;
 
 namespace PlaywrightTests.Pages
 {
-    class LoginPage: BasePage
+    public class LoginPage: BasePage
     {
-        LoginPage(IPage page) : base(page) {}
+        public LoginPage(IPage page) : base(page) {}
 
         public async Task<LoginPage> GoToLoginPageAsync()
         {
@@ -19,14 +19,15 @@ namespace PlaywrightTests.Pages
 
         public async Task<LoginPage> SelectAccountTypeAsync()
         {
-            await Page.ClickAsync("practice");
+            await Page.ClickAsync("[name='practice']");
             return this;
         }
 
-        public async Task<MainPage> LoginAsync()
+        public async Task<MainPage> LoginAsync(string email, string password)
         {
-            await Page.FillAsync("username", "onada@mailinator.com");
-            await Page.FillAsync("password", "qwerT1zed!");
+            await SelectAccountTypeAsync();
+            await Page.FillAsync("#username", email);
+            await Page.FillAsync("#password", password);
             await Page.ClickAsync("//*[@id='loginButton']");
             return new MainPage(Page);
         }

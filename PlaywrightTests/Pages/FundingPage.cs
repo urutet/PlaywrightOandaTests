@@ -7,7 +7,7 @@ using Microsoft.Playwright;
 
 namespace PlaywrightTests.Pages
 {
-    class FundingPage: BasePage
+    public class FundingPage: BasePage
     {
         public FundingPage(IPage page): base(page) {}
 
@@ -19,25 +19,67 @@ namespace PlaywrightTests.Pages
 
         public async Task<FundingPage> SelectTransferWindowAsync()
         {
-            await Page.ClickAsync("transfer");
+            await Page.ClickAsync("#transfer");
+            return this;
+        }
+
+        public async Task<FundingPage> SelectWithdrawWindowAsync()
+        {
+            await Page.ClickAsync("#withdraw");
+            return this;
+        }
+
+        public async Task<FundingPage> SelectCreditCardWithdrawalAsync()
+        {
+            await Page.ClickAsync("//*[@id='withdrawal-form']/div[1]/div/table/tbody/tr/td[5]/a");
+            return this;
+        }
+
+        public async Task<FundingPage> InputWithdrawalAmountAsync(double amount)
+        {
+            await Page.FillAsync("//input[@class='adjustmentAmount']", Convert.ToString(amount));
+            return this;
+        }
+
+        public async Task<FundingPage> FinishWithdrawalAsync()
+        {
+            await Page.ClickAsync("#withdrawal-proceed");
+            return this;
+        }
+
+        public async Task<FundingPage> MakeWithdrawalAsync(double amount)
+        {
+            await SelectWithdrawWindowAsync().Result
+                .SelectCreditCardWithdrawalAsync().Result
+                .InputWithdrawalAmountAsync(amount).Result
+                .FinishWithdrawalAsync();
             return this;
         }
 
         public async Task<FundingPage> InputAmountAsync(double amount)
         {
-            await Page.FillAsync("transfer-amount", Convert.ToString(amount));
+            await Page.FillAsync("#withdrawal-amount", Convert.ToString(amount));
             return this;
         }
 
         public async Task<FundingPage> CheckRateAsync()
         {
-            await Page.ClickAsync("transfer_proceed");
+            await Page.ClickAsync("#transfer_proceed");
             return this;
         }
 
         public async Task<FundingPage> FinishTransferAsync()
         {
-            await Page.ClickAsync("tcr_proceed");
+            await Page.ClickAsync("#tcr_proceed");
+            return this;
+        }
+
+        public async Task<FundingPage> MakeTransferAsync(double amount)
+        {
+            await SelectTransferWindowAsync().Result
+                .InputAmountAsync(amount).Result
+                .CheckRateAsync().Result
+                .FinishTransferAsync();
             return this;
         }
 
@@ -45,21 +87,23 @@ namespace PlaywrightTests.Pages
         {
             return Math.Round(
                     Convert.ToDouble(
-                        await Page.TextContentAsync("//span[@data-bind='text transfer_quote.multiply_rate']")), 4);
+                        await Page.TextContentAsync("//span[@data-bind='text transfer_quote.multiply_rate']")), 5);
         }
 
-        public async Task<double> GetTransferResult()
+        public async Task<double> GetTransferResultAsync()
         {
             return Math.Round(
                 Convert.ToDouble(
-                    await Page.TextContentAsync("//span[@data-bind='currency:destination_account.currency transfer_quote.destination_amount']")), 4);
+                    Page.TextContentAsync("//span[@data-bind='currency:destination_account.currency transfer_quote.destination_amount']")
+                        .Result.Remove(0, 1)), 5);
         }
 
-        public async Task<Double> GetConversionRate()
+        public async Task<Double> GetWithdrawalResultAsync()
         {
             return Math.Round(
                 Convert.ToDouble(
-                    await Page.TextContentAsync("//span[@data-bind='text transfer_quote.multiply_rate']")), 4);
+                    Page.TextContentAsync("//*[@id='summary']/table/tbody/tr[5]/td[2]")
+                        .Result.Remove(0, 1)), 7);
         }
     }
 }

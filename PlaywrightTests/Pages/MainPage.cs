@@ -7,7 +7,7 @@ using Microsoft.Playwright;
 
 namespace PlaywrightTests.Pages
 {
-    class MainPage : BasePage
+    public class MainPage : BasePage
     {
         public MainPage(IPage page) : base(page) {}
 
