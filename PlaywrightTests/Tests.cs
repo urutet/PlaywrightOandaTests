@@ -12,6 +12,7 @@ using PlaywrightTests.Service;
 
 namespace PlaywrightTests
 {
+    //need to use browserTest or contextTest
     public class Tests : Logging
     {
         private IPage _page;
@@ -36,7 +37,7 @@ namespace PlaywrightTests
             stock.NumberBeforeOperation = await mainPage.GetStocksAmount();
             await mainPage.BuyMarketStockAsync(amount);
 
-            await mainPage.WaitTimeOutAsync(1000.0f);
+            await mainPage.WaitTimeOutAsync(5000.0f);
 
             stock.NumberAfterOperation = await mainPage.GetStocksAmount();
             Assert.AreEqual(stock.NumberBeforeOperation, stock.NumberAfterOperation - amount);
@@ -52,7 +53,7 @@ namespace PlaywrightTests
             stock.NumberBeforeOperation = await mainPage.GetStocksAmount();
 
             await mainPage.SellMarketStockAsync(amount);
-            await mainPage.WaitTimeOutAsync(1000.0f);
+            await mainPage.WaitTimeOutAsync(5000.0f);
 
             stock.NumberAfterOperation = await mainPage.GetStocksAmount();
             Assert.AreEqual(stock.NumberBeforeOperation, stock.NumberAfterOperation + amount);
@@ -67,7 +68,7 @@ namespace PlaywrightTests
             stock.NumberBeforeOperation = await mainPage.GetStocksAmount();
             await mainPage.BuyLimitStockAsync(amount);
 
-            await mainPage.WaitTimeOutAsync(1000.0f);
+            await mainPage.WaitTimeOutAsync(5000.0f);
 
             stock.NumberAfterOperation = await mainPage.GetStocksAmount();
             Assert.AreEqual(stock.NumberBeforeOperation, stock.NumberAfterOperation - amount);
@@ -83,13 +84,13 @@ namespace PlaywrightTests
             stock.NumberBeforeOperation = await mainPage.GetStocksAmount();
 
             await mainPage.SellLimitStockAsync(amount);
-            await mainPage.WaitTimeOutAsync(1000.0f);
+            await mainPage.WaitTimeOutAsync(5000.0f);
 
             stock.NumberAfterOperation = await mainPage.GetStocksAmount();
             Assert.AreEqual(stock.NumberBeforeOperation, stock.NumberAfterOperation + amount);
         }
 
-        [Test]
+                [Test]
         [TestCase(1)]
         public async Task BuyStopStocks_ReturnsExpectedAmount(int amount)
         {
@@ -98,7 +99,7 @@ namespace PlaywrightTests
             stock.NumberBeforeOperation = await mainPage.GetStocksAmount();
             await mainPage.BuyStopStockAsync(amount);
 
-            await mainPage.WaitTimeOutAsync(1000.0f);
+            await mainPage.WaitTimeOutAsync(5000.0f);
 
             stock.NumberAfterOperation = await mainPage.GetStocksAmount();
             Assert.AreEqual(stock.NumberBeforeOperation, stock.NumberAfterOperation - amount);
@@ -114,7 +115,7 @@ namespace PlaywrightTests
             stock.NumberBeforeOperation = await mainPage.GetStocksAmount();
 
             await mainPage.SellStopStockAsync(amount);
-            await mainPage.WaitTimeOutAsync(1000.0f);
+            await mainPage.WaitTimeOutAsync(5000.0f);
 
             stock.NumberAfterOperation = await mainPage.GetStocksAmount();
             Assert.AreEqual(stock.NumberBeforeOperation, stock.NumberAfterOperation + amount);
