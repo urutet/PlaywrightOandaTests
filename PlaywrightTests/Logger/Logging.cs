@@ -33,7 +33,7 @@ namespace PlaywrightTests.Logger
         [SetUp]
         public async Task OnSetup()
         {
-            Logger.Information("Started");
+            Logger.Information($"{TestContext.CurrentContext.Test.FullName} Started");
         }
 
         private async Task ScreenshotOnFail()
@@ -43,7 +43,7 @@ namespace PlaywrightTests.Logger
             {
                 await Page.ScreenshotAsync(new PageScreenshotOptions
                 {
-                    Path = DirectoryNames.GetSolutionDirectory + @"/Screenshots/" + $"{DateTime.Now:dd-mm-yyyy-hh-mm-ss}.png"
+                    Path = @"../../Screenshots/" + $"{DateTime.Now:dd-mm-yyyy-hh-mm-ss}.png"
                 });
             }
         }
@@ -56,7 +56,7 @@ namespace PlaywrightTests.Logger
                 return;
             }
 
-            Logger.Information($"Finished with outcome: {outcome}");
+            Logger.Information($"{TestContext.CurrentContext.Test.FullName} Finished with outcome: {outcome}");
         }
         [TearDown]
         public async Task OnTearDown()
