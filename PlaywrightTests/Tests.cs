@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
@@ -62,6 +63,14 @@ namespace PlaywrightTests
             Deposit deposit = new Deposit(amount, await fundingPage.GetResultAsync());
 
             Assert.AreEqual(deposit.BalanceBeforeDeposit, deposit.BalanceAfterDeposit - deposit.Amount);
+        }
+
+        [Test]
+        [TestCase(1)]
+        public async Task BuyStocks_ReturnsExpectedAmount(int amount)
+        {
+            MainPage mainPage = await new MainPage(_page)
+                .SelectBuyStock();
         }
 
         [OneTimeTearDown]

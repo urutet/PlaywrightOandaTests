@@ -9,6 +9,7 @@ using NUnit.Framework.Interfaces;
 using Microsoft.Playwright.Helpers;
 using PlaywrightTests.Utils;
 using Serilog;
+using Serilog.Sinks.SystemConsole;
 
 namespace PlaywrightTests.Logger
 {
@@ -23,7 +24,9 @@ namespace PlaywrightTests.Logger
         public void LoadConfiguration()
         {
             Trace.Listeners.Add(new ConsoleTraceListener());
-            Logger = new LoggerConfiguration().WriteTo.DebugTest().CreateLogger();
+            Logger = new LoggerConfiguration().WriteTo
+                .Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+                .CreateLogger();
             Log.Logger = Logger;
         }
 
