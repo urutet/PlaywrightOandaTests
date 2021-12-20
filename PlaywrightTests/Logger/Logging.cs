@@ -3,19 +3,14 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Playwright;
-using Microsoft.Playwright.NUnit;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using Microsoft.Playwright.Helpers;
-using PlaywrightTests.Utils;
 using Serilog;
-using Serilog.Sinks.SystemConsole;
 
 namespace PlaywrightTests.Logger
 {
     public class Logging
     {
-        protected IConfiguration Configuration;
         protected ILogger Logger;
         protected IPage Page;
 
@@ -43,7 +38,7 @@ namespace PlaywrightTests.Logger
             {
                 await Page.ScreenshotAsync(new PageScreenshotOptions
                 {
-                    Path = @"../../Screenshots/" + $"{DateTime.Now:dd-mm-yyyy-hh-mm-ss}.png"
+                    Path = $"\\Screenshots\\{DateTime.Now:dd-mm-yyyy-hh-mm-ss}.png"
                 });
             }
         }
@@ -61,8 +56,8 @@ namespace PlaywrightTests.Logger
         [TearDown]
         public async Task OnTearDown()
         {
-            await ScreenshotOnFail();
             await LogResult();
+            //await ScreenshotOnFail();
         }
 
         [OneTimeTearDown]

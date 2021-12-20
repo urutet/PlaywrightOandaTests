@@ -28,6 +28,99 @@ namespace PlaywrightTests
         }
 
         [Test]
+        [TestCase(1)]
+        public async Task BuyMarketStocks_ReturnsExpectedAmount(int amount)
+        {
+            MainPage mainPage = new MainPage(_page);
+            Stock stock = new Stock();
+            stock.NumberBeforeOperation = await mainPage.GetStocksAmount();
+            await mainPage.BuyMarketStockAsync(amount);
+
+            await mainPage.WaitTimeOutAsync(1000.0f);
+
+            stock.NumberAfterOperation = await mainPage.GetStocksAmount();
+            Assert.AreEqual(stock.NumberBeforeOperation, stock.NumberAfterOperation - amount);
+        }
+
+        [Test]
+        [TestCase(1)]
+        public async Task SellMarketStocks_ReturnsExpectedAmount(int amount)
+        {
+            MainPage mainPage = new MainPage(_page);
+            Stock stock = new Stock();
+
+            stock.NumberBeforeOperation = await mainPage.GetStocksAmount();
+
+            await mainPage.SellMarketStockAsync(amount);
+            await mainPage.WaitTimeOutAsync(1000.0f);
+
+            stock.NumberAfterOperation = await mainPage.GetStocksAmount();
+            Assert.AreEqual(stock.NumberBeforeOperation, stock.NumberAfterOperation + amount);
+        }
+
+        [Test]
+        [TestCase(1)]
+        public async Task BuyLimitStocks_ReturnsExpectedAmount(int amount)
+        {
+            MainPage mainPage = new MainPage(_page);
+            Stock stock = new Stock();
+            stock.NumberBeforeOperation = await mainPage.GetStocksAmount();
+            await mainPage.BuyLimitStockAsync(amount);
+
+            await mainPage.WaitTimeOutAsync(1000.0f);
+
+            stock.NumberAfterOperation = await mainPage.GetStocksAmount();
+            Assert.AreEqual(stock.NumberBeforeOperation, stock.NumberAfterOperation - amount);
+        }
+
+        [Test]
+        [TestCase(1)]
+        public async Task SellLimitStocks_ReturnsExpectedAmount(int amount)
+        {
+            MainPage mainPage = new MainPage(_page);
+            Stock stock = new Stock();
+
+            stock.NumberBeforeOperation = await mainPage.GetStocksAmount();
+
+            await mainPage.SellLimitStockAsync(amount);
+            await mainPage.WaitTimeOutAsync(1000.0f);
+
+            stock.NumberAfterOperation = await mainPage.GetStocksAmount();
+            Assert.AreEqual(stock.NumberBeforeOperation, stock.NumberAfterOperation + amount);
+        }
+
+        [Test]
+        [TestCase(1)]
+        public async Task BuyStopStocks_ReturnsExpectedAmount(int amount)
+        {
+            MainPage mainPage = new MainPage(_page);
+            Stock stock = new Stock();
+            stock.NumberBeforeOperation = await mainPage.GetStocksAmount();
+            await mainPage.BuyStopStockAsync(amount);
+
+            await mainPage.WaitTimeOutAsync(1000.0f);
+
+            stock.NumberAfterOperation = await mainPage.GetStocksAmount();
+            Assert.AreEqual(stock.NumberBeforeOperation, stock.NumberAfterOperation - amount);
+        }
+
+        [Test]
+        [TestCase(1)]
+        public async Task SellStopStocks_ReturnsExpectedAmount(int amount)
+        {
+            MainPage mainPage = new MainPage(_page);
+            Stock stock = new Stock();
+
+            stock.NumberBeforeOperation = await mainPage.GetStocksAmount();
+
+            await mainPage.SellStopStockAsync(amount);
+            await mainPage.WaitTimeOutAsync(1000.0f);
+
+            stock.NumberAfterOperation = await mainPage.GetStocksAmount();
+            Assert.AreEqual(stock.NumberBeforeOperation, stock.NumberAfterOperation + amount);
+        }
+
+        [Test]
         [TestCase(10)]
         public async Task MoneyTransfer_ReturnsExpectedValue(double amount)
         {
@@ -63,14 +156,6 @@ namespace PlaywrightTests
             Deposit deposit = new Deposit(amount, await fundingPage.GetResultAsync());
 
             Assert.AreEqual(deposit.BalanceBeforeDeposit, deposit.BalanceAfterDeposit - deposit.Amount);
-        }
-
-        [Test]
-        [TestCase(1)]
-        public async Task BuyStocks_ReturnsExpectedAmount(int amount)
-        {
-            MainPage mainPage = await new MainPage(_page)
-                .SelectBuyStock();
         }
 
         [OneTimeTearDown]

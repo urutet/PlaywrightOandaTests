@@ -17,5 +17,11 @@ namespace PlaywrightTests.Pages
         {
             Page = page;
         }
+
+        public async Task<BasePage> WaitTimeOutAsync(float time)
+        {
+            await Page.WaitForTimeoutAsync(time);
+            return this;
+        }
     }
 }
