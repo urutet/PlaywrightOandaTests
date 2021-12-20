@@ -4,13 +4,14 @@ using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using NUnit.Framework;
 using PlaywrightTests.Browsers;
+using PlaywrightTests.Logger;
 using PlaywrightTests.Model;
 using PlaywrightTests.Pages;
 using PlaywrightTests.Service;
 
 namespace PlaywrightTests
 {
-    public class Tests
+    public class Tests : Logging
     {
         private IPage _page;
         private User _user;
